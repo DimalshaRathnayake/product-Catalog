@@ -15,76 +15,193 @@ export default function HomePage() {
   return (
     <>
       <style>{`
-        @media (max-width: 768px) {
+        @media (max-width: 1024px) {
+          .hero-card {
+            padding: 60px 32px !important;
+          }
+
+          .hero-content h1 {
+            font-size: 42px !important;
+            line-height: 1.15 !important;
+          }
+
           .split-grid {
             grid-template-columns: 1fr !important;
-            gap: 24px !important;
+            gap: 32px !important;
+          }
+
+          .product-grid.three-col {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+
+          .support-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+          }
+
+          .image-card,
+          .image-card.tall,
+          .image-factory,
+          .image-plant {
+            min-height: 320px !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .hero-section {
+            padding-top: 24px !important;
+          }
+
+          .hero-card {
+            min-height: auto !important;
+            padding: 48px 20px !important;
+            border-radius: 24px !important;
+          }
+
+          .hero-content {
+            padding: 0 !important;
+            max-width: 100% !important;
+          }
+
+          .hero-content h1 {
+            font-size: 32px !important;
+            line-height: 1.15 !important;
+            margin-top: 16px !important;
+          }
+
+          .hero-content p {
+            font-size: 15px !important;
+            line-height: 1.7 !important;
+          }
+
+          .eyebrow.pill {
+            font-size: 13px !important;
+            line-height: 1.4 !important;
+            padding: 10px 14px !important;
+            display: inline-flex !important;
+            flex-wrap: wrap !important;
+          }
+
+          .hero-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+            width: 100% !important;
+          }
+
+          .hero-actions .btn,
+          .inline-actions .btn {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+
+          .section {
+            padding: 56px 0 !important;
+          }
+
+          .container {
+            width: calc(100% - 32px) !important;
+          }
+
+          .product-grid.three-col,
+          .support-grid,
+          .split-grid {
+            grid-template-columns: 1fr !important;
+          }
+
+          .info-card,
+          .support-card {
+            padding: 24px 20px !important;
+          }
+
+          .center-link {
+            margin-top: 20px !important;
+            text-align: center !important;
+          }
+
+          .check-list {
+            gap: 12px !important;
+          }
+
+          .check-list li {
+            font-size: 15px !important;
+            line-height: 1.65 !important;
           }
 
           .inline-actions {
             display: flex !important;
             flex-direction: column !important;
             gap: 12px !important;
-          }
-
-          .inline-actions .btn {
             width: 100% !important;
           }
 
-          .image-card.image-factory,
-          .image-factory {
-            width: 100% !important;
-            min-height: 240px !important;
-            height: 240px !important;
-            max-width: 100% !important;
-            overflow: hidden !important;
-            position: relative !important;
-            display: block !important;
-            border-radius: 20px !important;
-            background-size: cover !important;
-            background-position: center center !important;
-            background-repeat: no-repeat !important;
+          .image-card,
+          .image-card.tall,
+          .image-factory,
+          .image-plant {
+            min-height: 260px !important;
+            border-radius: 22px !important;
           }
 
-          .image-card.image-factory::before,
-          .image-card.image-factory::after,
-          .image-factory::before,
-          .image-factory::after {
-            display: none !important;
-            content: none !important;
-            background: none !important;
+          .image-tag {
+            top: 16px !important;
+            left: 16px !important;
+            font-size: 12px !important;
+            padding: 10px 14px !important;
           }
 
-          .image-card.image-factory .image-tag,
-          .image-factory .image-tag {
-            position: absolute !important;
-            top: 12px !important;
-            left: 12px !important;
-            z-index: 3 !important;
-            display: inline-block !important;
-            font-size: 11px !important;
-            line-height: 1.2 !important;
-            padding: 6px 10px !important;
-            max-width: calc(100% - 24px) !important;
-            white-space: nowrap !important;
+          .dark-panel {
+            padding: 20px !important;
+            border-radius: 24px !important;
+          }
+
+          .muted-light {
+            font-size: 15px !important;
+            line-height: 1.7 !important;
           }
         }
 
         @media (max-width: 480px) {
-          .image-card.image-factory,
-          .image-factory {
-            min-height: 210px !important;
-            height: 210px !important;
-            border-radius: 18px !important;
+          .hero-card {
+            padding: 40px 16px !important;
           }
 
-          .image-card.image-factory .image-tag,
-          .image-factory .image-tag {
-            top: 10px !important;
-            left: 10px !important;
-            font-size: 10px !important;
-            padding: 6px 9px !important;
-            max-width: calc(100% - 20px) !important;
+          .hero-content h1 {
+            font-size: 28px !important;
+          }
+
+          .hero-content p {
+            font-size: 14px !important;
+          }
+
+          .eyebrow.pill {
+            font-size: 12px !important;
+            padding: 8px 12px !important;
+          }
+
+          .mini-icon,
+          .circle-icon {
+            width: 48px !important;
+            height: 48px !important;
+            font-size: 16px !important;
+          }
+
+          .info-card h3,
+          .support-card h4 {
+            font-size: 18px !important;
+          }
+
+          .info-card p,
+          .support-card p,
+          .muted-light,
+          .check-list li {
+            font-size: 14px !important;
+          }
+
+          .image-card,
+          .image-card.tall,
+          .image-factory,
+          .image-plant {
+            min-height: 220px !important;
           }
         }
       `}</style>
