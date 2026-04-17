@@ -21,47 +21,70 @@ export default function HomePage() {
             gap: 24px !important;
           }
 
-          .image-card.image-factory {
+          .inline-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 12px !important;
+          }
+
+          .inline-actions .btn {
+            width: 100% !important;
+          }
+
+          .image-card.image-factory,
+          .image-factory {
             width: 100% !important;
             min-height: 240px !important;
             height: 240px !important;
-            border-radius: 20px !important;
+            max-width: 100% !important;
             overflow: hidden !important;
-            background-position: center center !important;
-            background-size: cover !important;
-            display: block !important;
             position: relative !important;
+            display: block !important;
+            border-radius: 20px !important;
+            background-size: cover !important;
+            background-position: center center !important;
+            background-repeat: no-repeat !important;
+          }
+
+          .image-card.image-factory::before,
+          .image-card.image-factory::after,
+          .image-factory::before,
+          .image-factory::after {
+            display: none !important;
+            content: none !important;
+            background: none !important;
           }
 
           .image-card.image-factory .image-tag,
-          .image-card.image-factory span.image-tag {
+          .image-factory .image-tag {
             position: absolute !important;
-            top: 14px !important;
-            left: 14px !important;
-            z-index: 2 !important;
-            font-size: 12px !important;
+            top: 12px !important;
+            left: 12px !important;
+            z-index: 3 !important;
+            display: inline-block !important;
+            font-size: 11px !important;
             line-height: 1.2 !important;
-            padding: 8px 12px !important;
-            border-radius: 999px !important;
-            max-width: calc(100% - 28px) !important;
+            padding: 6px 10px !important;
+            max-width: calc(100% - 24px) !important;
             white-space: nowrap !important;
           }
         }
 
         @media (max-width: 480px) {
-          .image-card.image-factory {
+          .image-card.image-factory,
+          .image-factory {
             min-height: 210px !important;
             height: 210px !important;
             border-radius: 18px !important;
           }
 
           .image-card.image-factory .image-tag,
-          .image-card.image-factory span.image-tag {
-            top: 12px !important;
-            left: 12px !important;
-            font-size: 11px !important;
-            padding: 7px 10px !important;
-            max-width: calc(100% - 24px) !important;
+          .image-factory .image-tag {
+            top: 10px !important;
+            left: 10px !important;
+            font-size: 10px !important;
+            padding: 6px 9px !important;
+            max-width: calc(100% - 20px) !important;
           }
         }
       `}</style>
