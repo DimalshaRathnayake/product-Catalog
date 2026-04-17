@@ -261,7 +261,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="image-card image-factory">
-            <span className="image-tag">ISO MODELS</span>
+            {/* <span className="image-tag">ISO MODELS</span>*/}
           </div>
         </div>
       </section>
