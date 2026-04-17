@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
 const navItems = [
@@ -22,23 +23,268 @@ function Logo() {
 }
 
 function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <header className="site-header">
-      <div className="container nav-shell">
-        <Logo />
-        <nav>
-          {navItems.map(([to, label]) => (
-            <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => (isActive ? 'active' : '')}>
-              {label}
-            </NavLink>
-          ))}
-        </nav>
-        <div className="nav-actions">
-          <button className="icon-btn" aria-label="Search">⌕</button>
-          <button className="btn btn-primary">Request Quote</button>
+    <>
+      <style>{`
+        @media (max-width: 1024px) {
+          .nav-shell {
+            gap: 16px !important;
+          }
+
+          .site-header nav {
+            gap: 18px !important;
+          }
+
+          .nav-actions .btn {
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .site-header {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
+          }
+
+          .nav-shell {
+            position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
+          }
+
+          .logo-wrap {
+            flex-shrink: 0 !important;
+          }
+
+          .logo-wrap strong {
+            font-size: 15px !important;
+            line-height: 1.2 !important;
+            display: block !important;
+          }
+
+          .logo-wrap span {
+            font-size: 12px !important;
+            line-height: 1.2 !important;
+            display: block !important;
+          }
+
+          .logo-box {
+            width: 40px !important;
+            height: 40px !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 18px !important;
+            flex-shrink: 0 !important;
+          }
+
+          .mobile-menu-toggle {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 44px !important;
+            height: 44px !important;
+            border: 1px solid rgba(0,0,0,0.08) !important;
+            border-radius: 12px !important;
+            background: #fff !important;
+            font-size: 20px !important;
+            cursor: pointer !important;
+            flex-shrink: 0 !important;
+          }
+
+          .site-header nav {
+            position: absolute !important;
+            top: calc(100% + 10px) !important;
+            left: 0 !important;
+            right: 0 !important;
+            display: ${menuOpen ? 'flex' : 'none'} !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0 !important;
+            padding: 10px !important;
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
+            border: 1px solid rgba(0,0,0,0.06) !important;
+            z-index: 1001 !important;
+          }
+
+          .site-header nav a {
+            width: 100% !important;
+            padding: 14px 12px !important;
+            border-radius: 12px !important;
+            font-size: 15px !important;
+          }
+
+          .site-header nav a.active {
+            background: rgba(0,0,0,0.05) !important;
+          }
+
+          .nav-actions {
+            display: none !important;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .mobile-menu-toggle {
+            display: none !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .nav-shell {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
+          }
+
+          .logo-box {
+            width: 36px !important;
+            height: 36px !important;
+            font-size: 16px !important;
+          }
+
+          .logo-wrap strong {
+            font-size: 14px !important;
+          }
+
+          .logo-wrap span {
+            font-size: 11px !important;
+          }
+
+          .mobile-menu-toggle {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 18px !important;
+          }
+
+          .site-header nav {
+            top: calc(100% + 8px) !important;
+            padding: 8px !important;
+          }
+
+          .site-header nav a {
+            padding: 12px 10px !important;
+            font-size: 14px !important;
+          }
+
+          .cta-inner {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 20px !important;
+          }
+
+          .cta-inner h2 {
+            font-size: 24px !important;
+            line-height: 1.2 !important;
+          }
+
+          .cta-inner p {
+            font-size: 14px !important;
+            line-height: 1.7 !important;
+          }
+
+          .cta-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 12px !important;
+          }
+
+          .cta-actions .btn {
+            width: 100% !important;
+          }
+
+          .footer-grid {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+
+          .footer-bottom {
+            text-align: center !important;
+            font-size: 13px !important;
+            line-height: 1.6 !important;
+          }
+
+          .footer-main a,
+          .footer-main p,
+          .muted {
+            font-size: 14px !important;
+            line-height: 1.7 !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .cta-inner {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 24px !important;
+          }
+
+          .cta-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 12px !important;
+          }
+
+          .cta-actions .btn {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+
+          .footer-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 24px !important;
+          }
+        }
+      `}</style>
+
+      <header className="site-header">
+        <div className="container nav-shell">
+          <Logo />
+
+          <nav>
+            {navItems.map(([to, label]) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === '/'}
+                className={({ isActive }) => (isActive ? 'active' : '')}
+                onClick={() => setMenuOpen(false)}
+              >
+                {label}
+              </NavLink>
+            ))}
+          </nav>
+
+          <div className="nav-actions">
+            <button className="icon-btn" aria-label="Search">⌕</button>
+            <button className="btn btn-primary">Request Quote</button>
+          </div>
+
+          <button
+            className="mobile-menu-toggle"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((prev) => !prev)}
+            type="button"
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
         </div>
-      </div>
-    </header>
+      </header>
+    </>
   );
 }
 
