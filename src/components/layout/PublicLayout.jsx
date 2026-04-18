@@ -1,164 +1,350 @@
-import SectionTitle from '../components/common/SectionTitle';
-import StatGrid from '../components/common/StatGrid';
-import { productCategories } from '../data/siteData';
+import { useState } from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
 
-const stats = [
-  { value: '30+', label: 'Years Experience' },
-  { value: '85+', label: 'Countries Served' },
-  { value: '500+', label: 'Products' },
-  { value: '2,000+', label: 'Global Clients' },
+const navItems = [
+  ['/', 'Home'],
+  ['/about', 'About'],
+  ['/products', 'Products'],
+  ['/resources', 'Resources'],
+  ['/distributors', 'Distributors'],
+  ['/contact', 'Contact'],
 ];
 
-const supportItems = ['Advanced Manufacturing', 'Quality Assurance', 'Global Shipping', 'Expert Support'];
+function Logo() {
+  return (
+    <div className="logo-wrap">
+      <div className="logo-box">T</div>
+      <div>
+        <strong>TALENT</strong>
+        <span>Button Factory</span>
+      </div>
+    </div>
+  );
+}
 
-export default function HomePage() {
+function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <>
       <style>{`
+        @media (max-width: 1024px) {
+          .nav-shell {
+            gap: 16px !important;
+          }
+
+          .site-header nav {
+            gap: 18px !important;
+          }
+
+          .nav-actions .btn {
+            padding: 12px 16px !important;
+            font-size: 14px !important;
+          }
+        }
+
         @media (max-width: 768px) {
-          .split-grid {
-            grid-template-columns: 1fr !important;
-            gap: 24px !important;
+          .site-header {
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 1000 !important;
           }
 
-          .image-card.image-factory {
-            width: 100% !important;
-            min-height: 240px !important;
-            height: 240px !important;
-            border-radius: 20px !important;
-            overflow: hidden !important;
-            background-position: center center !important;
-            background-size: cover !important;
-            display: block !important;
+          .nav-shell {
             position: relative !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            gap: 12px !important;
+            padding-top: 14px !important;
+            padding-bottom: 14px !important;
           }
 
-          .image-card.image-factory .image-tag,
-          .image-card.image-factory span.image-tag {
-            position: absolute !important;
-            top: 14px !important;
-            left: 14px !important;
-            z-index: 2 !important;
+          .logo-wrap {
+            flex-shrink: 0 !important;
+          }
+
+          .logo-wrap strong {
+            font-size: 15px !important;
+            line-height: 1.2 !important;
+            display: block !important;
+          }
+
+          .logo-wrap span {
             font-size: 12px !important;
             line-height: 1.2 !important;
-            padding: 8px 12px !important;
-            border-radius: 999px !important;
-            max-width: calc(100% - 28px) !important;
-            white-space: nowrap !important;
+            display: block !important;
+          }
+
+          .logo-box {
+            width: 40px !important;
+            height: 40px !important;
+            display: grid !important;
+            place-items: center !important;
+            font-size: 18px !important;
+            flex-shrink: 0 !important;
+          }
+
+          .mobile-menu-toggle {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 44px !important;
+            height: 44px !important;
+            border: 1px solid rgba(0,0,0,0.08) !important;
+            border-radius: 12px !important;
+            background: #fff !important;
+            font-size: 20px !important;
+            cursor: pointer !important;
+            flex-shrink: 0 !important;
+          }
+
+          .site-header nav {
+            position: absolute !important;
+            top: calc(100% + 10px) !important;
+            left: 0 !important;
+            right: 0 !important;
+            display: ${menuOpen ? 'flex' : 'none'} !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 0 !important;
+            padding: 10px !important;
+            background: #ffffff !important;
+            border-radius: 18px !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
+            border: 1px solid rgba(0,0,0,0.06) !important;
+            z-index: 1001 !important;
+          }
+
+          .site-header nav a {
+            width: 100% !important;
+            padding: 14px 12px !important;
+            border-radius: 12px !important;
+            font-size: 15px !important;
+          }
+
+          .site-header nav a.active {
+            background: rgba(0,0,0,0.05) !important;
+          }
+
+          .nav-actions {
+            display: none !important;
+          }
+        }
+
+        @media (min-width: 769px) {
+          .mobile-menu-toggle {
+            display: none !important;
           }
         }
 
         @media (max-width: 480px) {
-          .image-card.image-factory {
-            min-height: 210px !important;
-            height: 210px !important;
-            border-radius: 18px !important;
+          .nav-shell {
+            padding-top: 12px !important;
+            padding-bottom: 12px !important;
           }
 
-          .image-card.image-factory .image-tag,
-          .image-card.image-factory span.image-tag {
-            top: 12px !important;
-            left: 12px !important;
+          .logo-box {
+            width: 36px !important;
+            height: 36px !important;
+            font-size: 16px !important;
+          }
+
+          .logo-wrap strong {
+            font-size: 14px !important;
+          }
+
+          .logo-wrap span {
             font-size: 11px !important;
-            padding: 7px 10px !important;
-            max-width: calc(100% - 24px) !important;
+          }
+
+          .mobile-menu-toggle {
+            width: 40px !important;
+            height: 40px !important;
+            font-size: 18px !important;
+          }
+
+          .site-header nav {
+            top: calc(100% + 8px) !important;
+            padding: 8px !important;
+          }
+
+          .site-header nav a {
+            padding: 12px 10px !important;
+            font-size: 14px !important;
+          }
+
+          .cta-inner {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 20px !important;
+          }
+
+          .cta-inner h2 {
+            font-size: 24px !important;
+            line-height: 1.2 !important;
+          }
+
+          .cta-inner p {
+            font-size: 14px !important;
+            line-height: 1.7 !important;
+          }
+
+          .cta-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 12px !important;
+          }
+
+          .cta-actions .btn {
+            width: 100% !important;
+          }
+
+          .footer-grid {
+            display: grid !important;
+            grid-template-columns: 1fr !important;
+            gap: 28px !important;
+          }
+
+          .footer-bottom {
+            text-align: center !important;
+            font-size: 13px !important;
+            line-height: 1.6 !important;
+          }
+
+          .footer-main a,
+          .footer-main p,
+          .muted {
+            font-size: 14px !important;
+            line-height: 1.7 !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .cta-inner {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 24px !important;
+          }
+
+          .cta-actions {
+            display: flex !important;
+            flex-direction: column !important;
+            width: 100% !important;
+            gap: 12px !important;
+          }
+
+          .cta-actions .btn {
+            width: 100% !important;
+            justify-content: center !important;
+          }
+
+          .footer-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 24px !important;
           }
         }
       `}</style>
 
-      <section className="hero-section">
-        <div className="container hero-card">
-          <div className="hero-overlay" />
-          <div className="hero-content">
-            <span className="eyebrow pill">Global Leader in Button Machinery Solutions</span>
-            <h1>Premium Button-Making Machinery & Solutions</h1>
-            <p>Professional badge presses, paper cutters, molds, and accessories trusted by manufacturers worldwide.</p>
-            <div className="hero-actions">
-              <button className="btn btn-primary">Explore Products</button>
-              <button className="btn btn-light">Become a Distributor</button>
-            </div>
-          </div>
-        </div>
-      </section>
+      <header className="site-header">
+        <div className="container nav-shell">
+          <Logo />
 
-      <StatGrid items={stats} />
-
-      <section className="section soft-bg">
-        <div className="container">
-          <SectionTitle
-            title="Complete Product Range"
-            text="Browse industrial button presses, cutters, molds, and complete manufacturing support under one roof."
-          />
-          <div className="product-grid three-col">
-            {productCategories.map((item) => (
-              <article key={item.title} className="info-card">
-                <div className="mini-icon">T</div>
-                <h3>{item.title}</h3>
-                <p>{item.desc}</p>
-                <a href="/products">→</a>
-              </article>
+          <nav>
+            {navItems.map(([to, label]) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={to === '/'}
+                className={({ isActive }) => (isActive ? 'active' : '')}
+                onClick={() => setMenuOpen(false)}
+              >
+                {label}
+              </NavLink>
             ))}
-          </div>
-          <div className="center-link">View all Products</div>
-        </div>
-      </section>
+          </nav>
 
-      <section className="section">
-        <div className="container split-grid">
+          <div className="nav-actions">
+            <button className="icon-btn" aria-label="Search">⌕</button>
+            <button className="btn btn-primary">Request Quote</button>
+          </div>
+
+          <button
+            className="mobile-menu-toggle"
+            aria-label="Toggle menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((prev) => !prev)}
+            type="button"
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
+        </div>
+      </header>
+    </>
+  );
+}
+
+function Footer() {
+  return (
+    <footer className="site-footer">
+      <div className="cta-strip">
+        <div className="container cta-inner">
           <div>
-            <SectionTitle align="left" title="Why Global Manufacturers Choose TALENT" />
-            <ul className="check-list">
-              <li>Industry-leading warranty program</li>
-              <li>Comprehensive training materials</li>
-              <li>Customizable solutions for OEM/ODM</li>
-              <li>Fast turnaround on spare parts</li>
-              <li>Reduced distributor support burden</li>
-              <li>Competitive bulk pricing</li>
-            </ul>
-            <div className="inline-actions">
-              <button className="btn btn-primary">Request More Details</button>
-              <button className="btn btn-outline">Download Catalog</button>
-            </div>
+            <h2>Ready to Elevate Your Button Production?</h2>
+            <p>Join thousands of satisfied customers worldwide. Get a custom quote for your business today.</p>
           </div>
-          <div className="image-card image-factory">
-            <span className="image-tag">ISO MODELS</span>
+          <div className="cta-actions">
+            <button className="btn btn-light">Request a Quote</button>
+            <button className="btn btn-outline-light">Contact Sales Team</button>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section className="section soft-bg compact-top">
-        <div className="container">
-          <SectionTitle title="Enterprise-Grade Service & Support" />
-          <div className="support-grid">
-            {supportItems.map((item) => (
-              <div key={item} className="support-card">
-                <div className="circle-icon">◌</div>
-                <h4>{item}</h4>
-                <p>Professional assistance and structured after-sales support built for industrial clients.</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section dark-panel-wrap">
-        <div className="container dark-panel split-grid dark">
-          <div className="image-card tall image-plant" />
+      <div className="footer-main">
+        <div className="container footer-grid">
           <div>
-            <SectionTitle align="left" title="State-of-the-Art Manufacturing Facilities" />
-            <p className="muted-light">
-              Our 50,000 sqm production center brings together precision metal fabrication, tooling, and quality control to ensure consistent output and long-term performance.
-            </p>
-            <ul className="check-list light">
-              <li>Advanced CNC machining center</li>
-              <li>ISO-certified QA processes</li>
-              <li>Full in-house toolroom innovation</li>
-              <li>Dedicated export packaging facility</li>
-            </ul>
-            <button className="btn btn-light">Virtual Factory Tour</button>
+            <Logo />
+            <p className="muted">Trusted source for button-making machines, parts, molds, and industrial solutions worldwide.</p>
+          </div>
+          <div>
+            <h4>Quick Links</h4>
+            <a href="/about">About Us</a>
+            <a href="/products">Products</a>
+            <a href="/resources">Resources</a>
+            <a href="/distributors">Become a Distributor</a>
+          </div>
+          <div>
+            <h4>Product Categories</h4>
+            <a href="/products">Button Machines</a>
+            <a href="/products">Paper Cutters</a>
+            <a href="/products">Button Parts</a>
+            <a href="/products">Molds & Accessories</a>
+          </div>
+          <div>
+            <h4>Contact Us</h4>
+            <p>No. 888 Demo Road, Guangdong, China</p>
+            <p>+86 020 1234 5678</p>
+            <p>info@talentbutton.com</p>
           </div>
         </div>
-      </section>
+        <div className="container footer-bottom">© 2024 TALENT Button Factory. All rights reserved.</div>
+      </div>
+    </footer>
+  );
+}
+
+export default function PublicLayout() {
+  return (
+    <>
+      <Header />
+      <main>
+        <Outlet />
+      </main>
+      <Footer />
     </>
   );
 }
