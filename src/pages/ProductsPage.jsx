@@ -3,25 +3,17 @@ import { products } from '../data/siteData';
 export default function ProductsPage() {
   return (
     <>
-      <section className="page-banner dark-banner products-hero">
+      <section className="page-banner dark-banner">
         <div className="container banner-left">
-          <span className="eyebrow">Product Catalog</span>
           <h1>All Products</h1>
-          <p>
-            Explore our complete range of professional button-making machines,
-            tools, and accessories designed for quality production.
-          </p>
+          <p>Explore our complete range of professional button-making machines, tools, and accessories.</p>
         </div>
       </section>
 
-      <section className="section compact-top products-section">
+      <section className="section compact-top">
         <div className="container products-layout">
-          <aside className="filter-card advanced-filter-card">
-            <div className="filter-header">
-              <h3>Filters</h3>
-              <span>Refine results</span>
-            </div>
-
+          <aside className="filter-card">
+            <h3>Filters</h3>
             <div className="filter-group">
               <label>Category</label>
               <a>Button Machines</a>
@@ -29,7 +21,6 @@ export default function ProductsPage() {
               <a>Button Parts</a>
               <a>Molds & Accessories</a>
             </div>
-
             <div className="filter-group">
               <label>Size</label>
               <a>25 mm</a>
@@ -39,39 +30,20 @@ export default function ProductsPage() {
             </div>
           </aside>
 
-          <div className="products-content">
-            <div className="catalog-toolbar advanced-toolbar">
-              <div className="search-wrap">
-                <span>⌕</span>
-                <input className="search-input" placeholder="Search products" />
-              </div>
-
-              <select className="select-input">
-                <option>Sort by newest</option>
-              </select>
+          <div>
+            <div className="catalog-toolbar">
+              <input className="search-input" placeholder="Search products" />
+              <select className="select-input"><option>Sort by newest</option></select>
             </div>
-
-            <div className="product-grid advanced-product-grid">
+            <div className="product-grid">
               {products.map((item) => (
-                <article key={item.sku} className="product-card advanced-product-card">
-                  <div className="product-thumb advanced-product-thumb">
-                    <div className="thumb-glow" />
-                  </div>
-
-                  <div className="product-card-body">
-                    <div className="product-topline">
-                      <span className="badge">POPULAR</span>
-                      <span className="sku">{item.sku}</span>
-                    </div>
-
-                    <h3>{item.name}</h3>
-                    <p>{item.category}</p>
-
-                    <div className="product-footer">
-                      <strong>{item.price}</strong>
-                      <button className="btn btn-primary full">Request Quote</button>
-                    </div>
-                  </div>
+                <article key={item.sku} className="product-card">
+                  <div className="product-thumb" />
+                  <span className="badge">POPULAR</span>
+                  <h3>{item.name}</h3>
+                  <p>{item.category}</p>
+                  <strong>{item.price}</strong>
+                  <button className="btn btn-primary full">Request Quote</button>
                 </article>
               ))}
             </div>
