@@ -44,6 +44,10 @@ function Header() {
         }
 
         @media (max-width: 768px) {
+          body {
+            overflow-x: hidden !important;
+          }
+
           .site-header {
             position: sticky !important;
             top: 0 !important;
@@ -97,30 +101,52 @@ function Header() {
             font-size: 20px !important;
             cursor: pointer !important;
             flex-shrink: 0 !important;
+            margin-left: auto !important;
+            position: relative !important;
+            z-index: 1300 !important;
+          }
+
+          .mobile-menu-overlay {
+            position: fixed !important;
+            inset: 0 !important;
+            background: rgba(15, 23, 42, 0.45) !important;
+            z-index: 1100 !important;
           }
 
           .site-header nav {
-            position: absolute !important;
-            top: calc(100% + 10px) !important;
-            left: 0 !important;
+            position: fixed !important;
+            top: 0 !important;
             right: 0 !important;
-            display: ${menuOpen ? 'flex' : 'none'} !important;
+            left: auto !important;
+            bottom: 0 !important;
+            width: min(82vw, 320px) !important;
+            max-width: 320px !important;
+            height: 100vh !important;
+            display: flex !important;
             flex-direction: column !important;
             align-items: stretch !important;
-            gap: 0 !important;
-            padding: 10px !important;
+            gap: 6px !important;
+            padding: 90px 18px 24px !important;
             background: #ffffff !important;
-            border-radius: 18px !important;
-            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
-            border: 1px solid rgba(0,0,0,0.06) !important;
-            z-index: 1001 !important;
+            border-radius: 22px 0 0 22px !important;
+            box-shadow: -20px 0 50px rgba(15, 23, 42, 0.22) !important;
+            border-left: 1px solid rgba(0,0,0,0.06) !important;
+            z-index: 1200 !important;
+            transform: translateX(110%) !important;
+            transition: transform 0.3s ease !important;
+            overflow-y: auto !important;
+          }
+
+          .site-header nav.mobile-nav-open {
+            transform: translateX(0) !important;
           }
 
           .site-header nav a {
             width: 100% !important;
-            padding: 14px 12px !important;
+            padding: 14px 14px !important;
             border-radius: 12px !important;
             font-size: 15px !important;
+            color: #111827 !important;
           }
 
           .site-header nav a.active {
@@ -133,7 +159,8 @@ function Header() {
         }
 
         @media (min-width: 769px) {
-          .mobile-menu-toggle {
+          .mobile-menu-toggle,
+          .mobile-menu-overlay {
             display: none !important;
           }
         }
@@ -165,12 +192,12 @@ function Header() {
           }
 
           .site-header nav {
-            top: calc(100% + 8px) !important;
-            padding: 8px !important;
+            width: 88vw !important;
+            padding: 82px 16px 22px !important;
           }
 
           .site-header nav a {
-            padding: 12px 10px !important;
+            padding: 12px 12px !important;
             font-size: 14px !important;
           }
 
@@ -248,13 +275,26 @@ function Header() {
             gap: 24px !important;
           }
         }
+
+        @media (max-width: 480px) {
+          .footer-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
       `}</style>
 
       <header className="site-header">
+        {menuOpen && (
+          <div
+            className="mobile-menu-overlay"
+            onClick={() => setMenuOpen(false)}
+          />
+        )}
+
         <div className="container nav-shell">
           <Logo />
 
-          <nav>
+          <nav className={menuOpen ? 'mobile-nav-open' : ''}>
             {navItems.map(([to, label]) => (
               <NavLink
                 key={to}
