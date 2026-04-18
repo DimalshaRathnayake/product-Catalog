@@ -83,8 +83,8 @@ export default function AdminLayout() {
           }
 
           .admin-topbar {
-            display: flex !important;
-            flex-wrap: wrap !important;
+            display: grid !important;
+            grid-template-columns: 1fr auto !important;
             align-items: center !important;
             gap: 12px !important;
             padding: 16px !important;
@@ -93,24 +93,11 @@ export default function AdminLayout() {
             z-index: 1000 !important;
           }
 
-          .admin-topbar .search-input {
-            order: 3 !important;
-            width: 100% !important;
-            min-width: 0 !important;
-          }
-
-          .topbar-actions {
-            display: flex !important;
-            align-items: center !important;
-            gap: 10px !important;
-            margin-left: auto !important;
-          }
-
-          .admin-page-content {
-            padding: 16px !important;
-          }
-
           .mobile-admin-toggle {
+            grid-column: 2 !important;
+            grid-row: 1 !important;
+            justify-self: end !important;
+            align-self: center !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -122,6 +109,29 @@ export default function AdminLayout() {
             cursor: pointer !important;
             font-size: 20px !important;
             flex-shrink: 0 !important;
+            margin-left: auto !important;
+          }
+
+          .topbar-actions {
+            grid-column: 1 / 3 !important;
+            grid-row: 2 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: flex-end !important;
+            gap: 10px !important;
+            width: 100% !important;
+            margin-left: 0 !important;
+          }
+
+          .admin-topbar .search-input {
+            grid-column: 1 / 3 !important;
+            grid-row: 3 !important;
+            width: 100% !important;
+            min-width: 0 !important;
+          }
+
+          .admin-page-content {
+            padding: 16px !important;
           }
 
           .admin-brand {
@@ -151,6 +161,7 @@ export default function AdminLayout() {
 
           .admin-topbar {
             padding: 14px !important;
+            grid-template-columns: 1fr auto !important;
           }
 
           .admin-page-content {
