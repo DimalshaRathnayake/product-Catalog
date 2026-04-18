@@ -1,267 +1,164 @@
-import { useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import SectionTitle from '../components/common/SectionTitle';
+import StatGrid from '../components/common/StatGrid';
+import { productCategories } from '../data/siteData';
 
-const links = [
-  ['/admin/dashboard', 'Dashboard'],
-  ['/admin/products', 'Products'],
-  ['/admin/resources', 'Resources'],
-  ['/admin/inquiries', 'Inquiries'],
-  ['/admin/distributors', 'Distributors'],
-  ['/admin/analytics', 'Analytics'],
-  ['/admin/users-roles', 'Users & Roles'],
-  ['/admin/settings', 'Settings'],
+const stats = [
+  { value: '30+', label: 'Years Experience' },
+  { value: '85+', label: 'Countries Served' },
+  { value: '500+', label: 'Products' },
+  { value: '2,000+', label: 'Global Clients' },
 ];
 
-export default function AdminLayout() {
-  const location = useLocation();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const supportItems = ['Advanced Manufacturing', 'Quality Assurance', 'Global Shipping', 'Expert Support'];
 
+export default function HomePage() {
   return (
     <>
       <style>{`
-        @media (max-width: 1024px) {
-          .admin-layout {
-            grid-template-columns: 260px minmax(0, 1fr) !important;
-          }
-
-          .admin-topbar {
-            gap: 12px !important;
-          }
-
-          .topbar-actions {
-            display: flex !important;
-            gap: 10px !important;
-          }
-
-          .search-input {
-            min-width: 0 !important;
-            width: 100% !important;
-          }
-        }
-
         @media (max-width: 768px) {
-          body {
-            overflow-x: hidden !important;
+          .split-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
           }
 
-          .admin-layout {
+          .image-card.image-factory {
+            width: 100% !important;
+            min-height: 240px !important;
+            height: 240px !important;
+            border-radius: 20px !important;
+            overflow: hidden !important;
+            background-position: center center !important;
+            background-size: cover !important;
             display: block !important;
             position: relative !important;
-            overflow-x: hidden !important;
           }
 
-          .admin-layout .admin-sidebar {
-            position: fixed !important;
-            top: 0 !important;
-            right: 0 !important;
-            left: auto !important;
-            bottom: 0 !important;
-            width: min(82vw, 320px) !important;
-            max-width: 320px !important;
-            height: 100vh !important;
-            transform: translateX(110%) !important;
-            transition: transform 0.3s ease !important;
-            z-index: 1200 !important;
-            overflow-y: auto !important;
-            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.22) !important;
-          }
-
-          .admin-layout .admin-sidebar.sidebar-open {
-            transform: translateX(0) !important;
-          }
-
-          .admin-sidebar-overlay {
-            position: fixed !important;
-            inset: 0 !important;
-            background: rgba(15, 23, 42, 0.45) !important;
-            z-index: 1100 !important;
-          }
-
-          .admin-main {
-            width: 100% !important;
-            min-width: 0 !important;
-          }
-
-          .admin-topbar {
-            display: flex !important;
-            flex-wrap: wrap !important;
-            align-items: center !important;
-            gap: 12px !important;
-            padding: 16px !important;
-            position: sticky !important;
-            top: 0 !important;
-            z-index: 1000 !important;
-          }
-
-          .admin-topbar .search-input {
-            order: 3 !important;
-            width: 100% !important;
-            min-width: 0 !important;
-          }
-
-          .topbar-actions {
-            display: flex !important;
-            align-items: center !important;
-            gap: 10px !important;
-            margin-left: auto !important;
-          }
-
-          .admin-page-content {
-            padding: 16px !important;
-          }
-
-          .mobile-admin-toggle {
-            display: inline-flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            width: 42px !important;
-            height: 42px !important;
-            border: 1px solid rgba(0, 0, 0, 0.08) !important;
-            border-radius: 12px !important;
-            background: #fff !important;
-            cursor: pointer !important;
-            font-size: 20px !important;
-            flex-shrink: 0 !important;
-          }
-
-          .admin-brand {
-            padding-right: 40px !important;
-          }
-
-          .admin-profile {
-            margin-top: 20px !important;
-          }
-
-          .btn.small {
+          .image-card.image-factory .image-tag,
+          .image-card.image-factory span.image-tag {
+            position: absolute !important;
+            top: 14px !important;
+            left: 14px !important;
+            z-index: 2 !important;
+            font-size: 12px !important;
+            line-height: 1.2 !important;
+            padding: 8px 12px !important;
+            border-radius: 999px !important;
+            max-width: calc(100% - 28px) !important;
             white-space: nowrap !important;
           }
         }
 
-        @media (min-width: 769px) {
-          .mobile-admin-toggle,
-          .admin-sidebar-overlay {
-            display: none !important;
-          }
-        }
-
         @media (max-width: 480px) {
-          .admin-layout .admin-sidebar {
-            width: 88vw !important;
+          .image-card.image-factory {
+            min-height: 210px !important;
+            height: 210px !important;
+            border-radius: 18px !important;
           }
 
-          .admin-topbar {
-            padding: 14px !important;
-          }
-
-          .admin-page-content {
-            padding: 14px !important;
-          }
-
-          .mobile-admin-toggle {
-            width: 40px !important;
-            height: 40px !important;
-            font-size: 18px !important;
-            border-radius: 10px !important;
-          }
-
-          .search-input {
-            font-size: 14px !important;
-          }
-
-          .topbar-actions .btn.small {
-            padding: 10px 12px !important;
-            font-size: 13px !important;
-          }
-
-          .topbar-actions .icon-btn {
-            width: 40px !important;
-            height: 40px !important;
-          }
-
-          .admin-nav a {
-            font-size: 14px !important;
-          }
-
-          .admin-brand strong,
-          .admin-profile strong {
-            font-size: 14px !important;
-          }
-
-          .admin-brand span,
-          .admin-profile span {
-            font-size: 12px !important;
+          .image-card.image-factory .image-tag,
+          .image-card.image-factory span.image-tag {
+            top: 12px !important;
+            left: 12px !important;
+            font-size: 11px !important;
+            padding: 7px 10px !important;
+            max-width: calc(100% - 24px) !important;
           }
         }
       `}</style>
 
-      <div className="admin-layout">
-        {sidebarOpen && (
-          <div
-            className="admin-sidebar-overlay"
-            onClick={() => setSidebarOpen(false)}
+      <section className="hero-section">
+        <div className="container hero-card">
+          <div className="hero-overlay" />
+          <div className="hero-content">
+            <span className="eyebrow pill">Global Leader in Button Machinery Solutions</span>
+            <h1>Premium Button-Making Machinery & Solutions</h1>
+            <p>Professional badge presses, paper cutters, molds, and accessories trusted by manufacturers worldwide.</p>
+            <div className="hero-actions">
+              <button className="btn btn-primary">Explore Products</button>
+              <button className="btn btn-light">Become a Distributor</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <StatGrid items={stats} />
+
+      <section className="section soft-bg">
+        <div className="container">
+          <SectionTitle
+            title="Complete Product Range"
+            text="Browse industrial button presses, cutters, molds, and complete manufacturing support under one roof."
           />
-        )}
-
-        <aside className={`admin-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
-          <div className="admin-brand">
-            <div className="logo-box">T</div>
-            <div>
-              <strong>TALENT Admin</strong>
-              <span>Control panel</span>
-            </div>
-          </div>
-
-          <nav className="admin-nav">
-            {links.map(([to, label]) => (
-              <NavLink
-                key={to}
-                to={to}
-                onClick={() => setSidebarOpen(false)}
-                className={({ isActive }) =>
-                  isActive || (to === '/admin/products' && location.pathname === '/admin/products/new')
-                    ? 'active'
-                    : ''
-                }
-              >
-                {label}
-              </NavLink>
+          <div className="product-grid three-col">
+            {productCategories.map((item) => (
+              <article key={item.title} className="info-card">
+                <div className="mini-icon">T</div>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+                <a href="/products">→</a>
+              </article>
             ))}
-          </nav>
+          </div>
+          <div className="center-link">View all Products</div>
+        </div>
+      </section>
 
-          <div className="admin-profile">
-            <div className="avatar">AD</div>
-            <div>
-              <strong>Admin User</strong>
-              <span>Administrator</span>
+      <section className="section">
+        <div className="container split-grid">
+          <div>
+            <SectionTitle align="left" title="Why Global Manufacturers Choose TALENT" />
+            <ul className="check-list">
+              <li>Industry-leading warranty program</li>
+              <li>Comprehensive training materials</li>
+              <li>Customizable solutions for OEM/ODM</li>
+              <li>Fast turnaround on spare parts</li>
+              <li>Reduced distributor support burden</li>
+              <li>Competitive bulk pricing</li>
+            </ul>
+            <div className="inline-actions">
+              <button className="btn btn-primary">Request More Details</button>
+              <button className="btn btn-outline">Download Catalog</button>
             </div>
           </div>
-        </aside>
-
-        <section className="admin-main">
-          <header className="admin-topbar">
-            <button
-              type="button"
-              className="mobile-admin-toggle"
-              aria-label="Toggle sidebar"
-              aria-expanded={sidebarOpen}
-              onClick={() => setSidebarOpen((prev) => !prev)}
-            >
-              {sidebarOpen ? '✕' : '☰'}
-            </button>
-
-            <input className="search-input" placeholder="Search products, inquiries, resources..." />
-
-            <div className="topbar-actions">
-              <button className="icon-btn">⤴</button>
-              <button className="btn btn-primary small">View Website</button>
-            </div>
-          </header>
-
-          <div className="admin-page-content">
-            <Outlet />
+          <div className="image-card image-factory">
+            <span className="image-tag">ISO MODELS</span>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section className="section soft-bg compact-top">
+        <div className="container">
+          <SectionTitle title="Enterprise-Grade Service & Support" />
+          <div className="support-grid">
+            {supportItems.map((item) => (
+              <div key={item} className="support-card">
+                <div className="circle-icon">◌</div>
+                <h4>{item}</h4>
+                <p>Professional assistance and structured after-sales support built for industrial clients.</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section dark-panel-wrap">
+        <div className="container dark-panel split-grid dark">
+          <div className="image-card tall image-plant" />
+          <div>
+            <SectionTitle align="left" title="State-of-the-Art Manufacturing Facilities" />
+            <p className="muted-light">
+              Our 50,000 sqm production center brings together precision metal fabrication, tooling, and quality control to ensure consistent output and long-term performance.
+            </p>
+            <ul className="check-list light">
+              <li>Advanced CNC machining center</li>
+              <li>ISO-certified QA processes</li>
+              <li>Full in-house toolroom innovation</li>
+              <li>Dedicated export packaging facility</li>
+            </ul>
+            <button className="btn btn-light">Virtual Factory Tour</button>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
