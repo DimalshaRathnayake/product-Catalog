@@ -40,12 +40,17 @@ export default function AdminLayout() {
         }
 
         @media (max-width: 768px) {
+          body {
+            overflow-x: hidden !important;
+          }
+
           .admin-layout {
             display: block !important;
             position: relative !important;
+            overflow-x: hidden !important;
           }
 
-          .admin-sidebar {
+          .admin-layout .admin-sidebar {
             position: fixed !important;
             top: 0 !important;
             right: 0 !important;
@@ -53,11 +58,16 @@ export default function AdminLayout() {
             bottom: 0 !important;
             width: min(82vw, 320px) !important;
             max-width: 320px !important;
-            transform: ${sidebarOpen ? 'translateX(0)' : 'translateX(100%)'} !important;
+            height: 100vh !important;
+            transform: translateX(110%) !important;
             transition: transform 0.3s ease !important;
             z-index: 1200 !important;
             overflow-y: auto !important;
-            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.2) !important;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.22) !important;
+          }
+
+          .admin-layout .admin-sidebar.sidebar-open {
+            transform: translateX(0) !important;
           }
 
           .admin-sidebar-overlay {
@@ -135,7 +145,7 @@ export default function AdminLayout() {
         }
 
         @media (max-width: 480px) {
-          .admin-sidebar {
+          .admin-layout .admin-sidebar {
             width: 88vw !important;
           }
 
@@ -185,9 +195,14 @@ export default function AdminLayout() {
       `}</style>
 
       <div className="admin-layout">
-        {sidebarOpen && <div className="admin-sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+        {sidebarOpen && (
+          <div
+            className="admin-sidebar-overlay"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
 
-        <aside className="admin-sidebar">
+        <aside className={`admin-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
           <div className="admin-brand">
             <div className="logo-box">T</div>
             <div>
@@ -203,7 +218,9 @@ export default function AdminLayout() {
                 to={to}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
-                  isActive || (to === '/admin/products' && location.pathname === '/admin/products/new') ? 'active' : ''
+                  isActive || (to === '/admin/products' && location.pathname === '/admin/products/new')
+                    ? 'active'
+                    : ''
                 }
               >
                 {label}
@@ -239,6 +256,7 @@ export default function AdminLayout() {
               <button className="btn btn-primary small">View Website</button>
             </div>
           </header>
+
           <div className="admin-page-content">
             <Outlet />
           </div>
