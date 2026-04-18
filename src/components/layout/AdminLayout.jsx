@@ -48,15 +48,16 @@ export default function AdminLayout() {
           .admin-sidebar {
             position: fixed !important;
             top: 0 !important;
-            left: 0 !important;
+            right: 0 !important;
+            left: auto !important;
             bottom: 0 !important;
             width: min(82vw, 320px) !important;
             max-width: 320px !important;
-            transform: ${sidebarOpen ? 'translateX(0)' : 'translateX(-100%)'} !important;
+            transform: ${sidebarOpen ? 'translateX(0)' : 'translateX(100%)'} !important;
             transition: transform 0.3s ease !important;
             z-index: 1200 !important;
             overflow-y: auto !important;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2) !important;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.2) !important;
           }
 
           .admin-sidebar-overlay {
