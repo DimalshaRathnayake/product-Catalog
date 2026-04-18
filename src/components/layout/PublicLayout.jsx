@@ -1,350 +1,267 @@
 import { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
 
-const navItems = [
-  ['/', 'Home'],
-  ['/about', 'About'],
-  ['/products', 'Products'],
-  ['/resources', 'Resources'],
-  ['/distributors', 'Distributors'],
-  ['/contact', 'Contact'],
+const links = [
+  ['/admin/dashboard', 'Dashboard'],
+  ['/admin/products', 'Products'],
+  ['/admin/resources', 'Resources'],
+  ['/admin/inquiries', 'Inquiries'],
+  ['/admin/distributors', 'Distributors'],
+  ['/admin/analytics', 'Analytics'],
+  ['/admin/users-roles', 'Users & Roles'],
+  ['/admin/settings', 'Settings'],
 ];
 
-function Logo() {
-  return (
-    <div className="logo-wrap">
-      <div className="logo-box">T</div>
-      <div>
-        <strong>TALENT</strong>
-        <span>Button Factory</span>
-      </div>
-    </div>
-  );
-}
-
-function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
+export default function AdminLayout() {
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <>
       <style>{`
         @media (max-width: 1024px) {
-          .nav-shell {
-            gap: 16px !important;
+          .admin-layout {
+            grid-template-columns: 260px minmax(0, 1fr) !important;
           }
 
-          .site-header nav {
-            gap: 18px !important;
+          .admin-topbar {
+            gap: 12px !important;
           }
 
-          .nav-actions .btn {
-            padding: 12px 16px !important;
-            font-size: 14px !important;
+          .topbar-actions {
+            display: flex !important;
+            gap: 10px !important;
+          }
+
+          .search-input {
+            min-width: 0 !important;
+            width: 100% !important;
           }
         }
 
         @media (max-width: 768px) {
-          .site-header {
+          body {
+            overflow-x: hidden !important;
+          }
+
+          .admin-layout {
+            display: block !important;
+            position: relative !important;
+            overflow-x: hidden !important;
+          }
+
+          .admin-layout .admin-sidebar {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0 !important;
+            left: auto !important;
+            bottom: 0 !important;
+            width: min(82vw, 320px) !important;
+            max-width: 320px !important;
+            height: 100vh !important;
+            transform: translateX(110%) !important;
+            transition: transform 0.3s ease !important;
+            z-index: 1200 !important;
+            overflow-y: auto !important;
+            box-shadow: -20px 0 50px rgba(0, 0, 0, 0.22) !important;
+          }
+
+          .admin-layout .admin-sidebar.sidebar-open {
+            transform: translateX(0) !important;
+          }
+
+          .admin-sidebar-overlay {
+            position: fixed !important;
+            inset: 0 !important;
+            background: rgba(15, 23, 42, 0.45) !important;
+            z-index: 1100 !important;
+          }
+
+          .admin-main {
+            width: 100% !important;
+            min-width: 0 !important;
+          }
+
+          .admin-topbar {
+            display: flex !important;
+            flex-wrap: wrap !important;
+            align-items: center !important;
+            gap: 12px !important;
+            padding: 16px !important;
             position: sticky !important;
             top: 0 !important;
             z-index: 1000 !important;
           }
 
-          .nav-shell {
-            position: relative !important;
+          .admin-topbar .search-input {
+            order: 3 !important;
+            width: 100% !important;
+            min-width: 0 !important;
+          }
+
+          .topbar-actions {
             display: flex !important;
             align-items: center !important;
-            justify-content: space-between !important;
-            gap: 12px !important;
-            padding-top: 14px !important;
-            padding-bottom: 14px !important;
+            gap: 10px !important;
+            margin-left: auto !important;
           }
 
-          .logo-wrap {
-            flex-shrink: 0 !important;
+          .admin-page-content {
+            padding: 16px !important;
           }
 
-          .logo-wrap strong {
-            font-size: 15px !important;
-            line-height: 1.2 !important;
-            display: block !important;
-          }
-
-          .logo-wrap span {
-            font-size: 12px !important;
-            line-height: 1.2 !important;
-            display: block !important;
-          }
-
-          .logo-box {
-            width: 40px !important;
-            height: 40px !important;
-            display: grid !important;
-            place-items: center !important;
-            font-size: 18px !important;
-            flex-shrink: 0 !important;
-          }
-
-          .mobile-menu-toggle {
+          .mobile-admin-toggle {
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
-            width: 44px !important;
-            height: 44px !important;
-            border: 1px solid rgba(0,0,0,0.08) !important;
+            width: 42px !important;
+            height: 42px !important;
+            border: 1px solid rgba(0, 0, 0, 0.08) !important;
             border-radius: 12px !important;
             background: #fff !important;
-            font-size: 20px !important;
             cursor: pointer !important;
+            font-size: 20px !important;
             flex-shrink: 0 !important;
           }
 
-          .site-header nav {
-            position: absolute !important;
-            top: calc(100% + 10px) !important;
-            left: 0 !important;
-            right: 0 !important;
-            display: ${menuOpen ? 'flex' : 'none'} !important;
-            flex-direction: column !important;
-            align-items: stretch !important;
-            gap: 0 !important;
-            padding: 10px !important;
-            background: #ffffff !important;
-            border-radius: 18px !important;
-            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12) !important;
-            border: 1px solid rgba(0,0,0,0.06) !important;
-            z-index: 1001 !important;
+          .admin-brand {
+            padding-right: 40px !important;
           }
 
-          .site-header nav a {
-            width: 100% !important;
-            padding: 14px 12px !important;
-            border-radius: 12px !important;
-            font-size: 15px !important;
+          .admin-profile {
+            margin-top: 20px !important;
           }
 
-          .site-header nav a.active {
-            background: rgba(0,0,0,0.05) !important;
-          }
-
-          .nav-actions {
-            display: none !important;
+          .btn.small {
+            white-space: nowrap !important;
           }
         }
 
         @media (min-width: 769px) {
-          .mobile-menu-toggle {
+          .mobile-admin-toggle,
+          .admin-sidebar-overlay {
             display: none !important;
           }
         }
 
         @media (max-width: 480px) {
-          .nav-shell {
-            padding-top: 12px !important;
-            padding-bottom: 12px !important;
+          .admin-layout .admin-sidebar {
+            width: 88vw !important;
           }
 
-          .logo-box {
-            width: 36px !important;
-            height: 36px !important;
-            font-size: 16px !important;
+          .admin-topbar {
+            padding: 14px !important;
           }
 
-          .logo-wrap strong {
-            font-size: 14px !important;
+          .admin-page-content {
+            padding: 14px !important;
           }
 
-          .logo-wrap span {
-            font-size: 11px !important;
-          }
-
-          .mobile-menu-toggle {
+          .mobile-admin-toggle {
             width: 40px !important;
             height: 40px !important;
             font-size: 18px !important;
+            border-radius: 10px !important;
           }
 
-          .site-header nav {
-            top: calc(100% + 8px) !important;
-            padding: 8px !important;
-          }
-
-          .site-header nav a {
-            padding: 12px 10px !important;
+          .search-input {
             font-size: 14px !important;
           }
 
-          .cta-inner {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 20px !important;
-          }
-
-          .cta-inner h2 {
-            font-size: 24px !important;
-            line-height: 1.2 !important;
-          }
-
-          .cta-inner p {
-            font-size: 14px !important;
-            line-height: 1.7 !important;
-          }
-
-          .cta-actions {
-            display: flex !important;
-            flex-direction: column !important;
-            width: 100% !important;
-            gap: 12px !important;
-          }
-
-          .cta-actions .btn {
-            width: 100% !important;
-          }
-
-          .footer-grid {
-            display: grid !important;
-            grid-template-columns: 1fr !important;
-            gap: 28px !important;
-          }
-
-          .footer-bottom {
-            text-align: center !important;
+          .topbar-actions .btn.small {
+            padding: 10px 12px !important;
             font-size: 13px !important;
-            line-height: 1.6 !important;
           }
 
-          .footer-main a,
-          .footer-main p,
-          .muted {
+          .topbar-actions .icon-btn {
+            width: 40px !important;
+            height: 40px !important;
+          }
+
+          .admin-nav a {
             font-size: 14px !important;
-            line-height: 1.7 !important;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .cta-inner {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 24px !important;
           }
 
-          .cta-actions {
-            display: flex !important;
-            flex-direction: column !important;
-            width: 100% !important;
-            gap: 12px !important;
+          .admin-brand strong,
+          .admin-profile strong {
+            font-size: 14px !important;
           }
 
-          .cta-actions .btn {
-            width: 100% !important;
-            justify-content: center !important;
-          }
-
-          .footer-grid {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 24px !important;
+          .admin-brand span,
+          .admin-profile span {
+            font-size: 12px !important;
           }
         }
       `}</style>
 
-      <header className="site-header">
-        <div className="container nav-shell">
-          <Logo />
+      <div className="admin-layout">
+        {sidebarOpen && (
+          <div
+            className="admin-sidebar-overlay"
+            onClick={() => setSidebarOpen(false)}
+          />
+        )}
 
-          <nav>
-            {navItems.map(([to, label]) => (
+        <aside className={`admin-sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
+          <div className="admin-brand">
+            <div className="logo-box">T</div>
+            <div>
+              <strong>TALENT Admin</strong>
+              <span>Control panel</span>
+            </div>
+          </div>
+
+          <nav className="admin-nav">
+            {links.map(([to, label]) => (
               <NavLink
                 key={to}
                 to={to}
-                end={to === '/'}
-                className={({ isActive }) => (isActive ? 'active' : '')}
-                onClick={() => setMenuOpen(false)}
+                onClick={() => setSidebarOpen(false)}
+                className={({ isActive }) =>
+                  isActive || (to === '/admin/products' && location.pathname === '/admin/products/new')
+                    ? 'active'
+                    : ''
+                }
               >
                 {label}
               </NavLink>
             ))}
           </nav>
 
-          <div className="nav-actions">
-            <button className="icon-btn" aria-label="Search">⌕</button>
-            <button className="btn btn-primary">Request Quote</button>
+          <div className="admin-profile">
+            <div className="avatar">AD</div>
+            <div>
+              <strong>Admin User</strong>
+              <span>Administrator</span>
+            </div>
           </div>
+        </aside>
 
-          <button
-            className="mobile-menu-toggle"
-            aria-label="Toggle menu"
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((prev) => !prev)}
-            type="button"
-          >
-            {menuOpen ? '✕' : '☰'}
-          </button>
-        </div>
-      </header>
-    </>
-  );
-}
+        <section className="admin-main">
+          <header className="admin-topbar">
+            <button
+              type="button"
+              className="mobile-admin-toggle"
+              aria-label="Toggle sidebar"
+              aria-expanded={sidebarOpen}
+              onClick={() => setSidebarOpen((prev) => !prev)}
+            >
+              {sidebarOpen ? '✕' : '☰'}
+            </button>
 
-function Footer() {
-  return (
-    <footer className="site-footer">
-      <div className="cta-strip">
-        <div className="container cta-inner">
-          <div>
-            <h2>Ready to Elevate Your Button Production?</h2>
-            <p>Join thousands of satisfied customers worldwide. Get a custom quote for your business today.</p>
+            <input className="search-input" placeholder="Search products, inquiries, resources..." />
+
+            <div className="topbar-actions">
+              <button className="icon-btn">⤴</button>
+              <button className="btn btn-primary small">View Website</button>
+            </div>
+          </header>
+
+          <div className="admin-page-content">
+            <Outlet />
           </div>
-          <div className="cta-actions">
-            <button className="btn btn-light">Request a Quote</button>
-            <button className="btn btn-outline-light">Contact Sales Team</button>
-          </div>
-        </div>
+        </section>
       </div>
-
-      <div className="footer-main">
-        <div className="container footer-grid">
-          <div>
-            <Logo />
-            <p className="muted">Trusted source for button-making machines, parts, molds, and industrial solutions worldwide.</p>
-          </div>
-          <div>
-            <h4>Quick Links</h4>
-            <a href="/about">About Us</a>
-            <a href="/products">Products</a>
-            <a href="/resources">Resources</a>
-            <a href="/distributors">Become a Distributor</a>
-          </div>
-          <div>
-            <h4>Product Categories</h4>
-            <a href="/products">Button Machines</a>
-            <a href="/products">Paper Cutters</a>
-            <a href="/products">Button Parts</a>
-            <a href="/products">Molds & Accessories</a>
-          </div>
-          <div>
-            <h4>Contact Us</h4>
-            <p>No. 888 Demo Road, Guangdong, China</p>
-            <p>+86 020 1234 5678</p>
-            <p>info@talentbutton.com</p>
-          </div>
-        </div>
-        <div className="container footer-bottom">© 2024 TALENT Button Factory. All rights reserved.</div>
-      </div>
-    </footer>
-  );
-}
-
-export default function PublicLayout() {
-  return (
-    <>
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
     </>
   );
 }
